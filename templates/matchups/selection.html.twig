@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="container">
+    <div class="d-flex justify-content-around titre-b">
+      <div class="align-items-center d-none d-xl-flex">
+        <img src="img/bg/ligne3.png" classe="ligne" id="ligne1" alt="">
+      </div>
+      <h1 class="text-center color-txt">Sélectionnez votre champion</h1>
+      <div class="align-items-center d-none d-xl-flex">
+        <img src="img/bg/ligne3.png" classe="ligne" id="ligne2" alt="">
+      </div>
+    </div>
+    <p class=" text-center soustitre">Veuillez sélectionner le champion que vous souhaitez jouer.</p>
+    <div class="col">
+      <div class="row justify-content-center">
+
+        {% for champ in selectChamp %}
+            <div class="px-2 py-2 {% if champ.state == 1 %}scale{% else %}indispo{% endif %}">
+            {% if champ.state == 1 %}
+              {% set id = champ.id %}
+                <a href='{{ path('adversairesChamp',{id:champ.id}) }}'>
+                    <div class='position-relative'><div class='filter position-absolute'></div><img src='http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/{{ champ.id }}.png' class='card-img' alt=''></div>
+                </a>
+            {% else %}
+                <div class='position-relative'><div class='position-absolute'></div><img src='http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/{{ champ.id }}.png' class='card-img' alt=''></div>
+            {% endif %}
+        
+            </div>
+
+        {% endfor %}
+
+      </div>
+    </div>
+  </section>
+{% endblock %}

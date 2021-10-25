@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="container mb-footer">
+        <div class="d-flex justify-content-around titre-b">
+            <div class="align-items-center d-none d-xl-flex">
+                <img src="img/bg/ligne3.png" classe="ligne" id="ligne1" alt="">
+            </div>
+            <h1 class="text-center color-txt">Les matchups pour {{ champ.name }}</h1>
+            <div class="align-items-center d-none d-xl-flex">
+                <img src="img/bg/ligne3.png" classe="ligne" id="ligne2" alt="">
+            </div>
+        </div>
+        <p class=" text-center soustitre">Les matchups sont classés par ordre de difficultés afin de vous aiguiller dans votre choix.</p>
+        <div class="col">
+            <div class="row justify-content-center">
+
+                {% for reverse in reverses %}
+                    <div class="scale2 px-2 py-2">
+                        <div class="iconchamp card-img" {% if idE is defined %}
+                                                            {% if reverse.enemy_name == reverse.name %}
+                                                                style='display: none'
+                                                            {% endif %}
+                                                        {% endif %}>
+
+                            <style>.dif{{ reverse.difid }}{background-color: {{ reverse.couleur }};}</style>
+                            <a href=''>
+                            <div class='position-relative'><div class='filter position-absolute'></div><div><img src ='http://ddragon.leagueoflegends.com/cdn/img/champion/tiles/{{ reverse.id }}_0.jpg' alt=''><div class='difficulté dif{{ reverse.difid }} mx-auto'></div></div></div>
+                            </a>";
+                            ?>
+                        </div>
+
+                        <h3 class="text-center color-txt">{{ reverse.level }}</h3>
+                    </div>
+                {% endfor %}
+
+                <div id="filling-empty-space-child-reverse"></div>
+            </div>
+        </div>
+    </section>
+{% endblock%}

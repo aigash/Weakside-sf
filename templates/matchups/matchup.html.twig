@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <!-- Card champion joué -->
+            <div class="col-4 mt-10">
+                <div>
+                    <h2 class="color-txt mb-4 text-center champName">{{ matchups.my_character_name }}</h2>
+                    <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/{{ matchups.my_character_id }}_0.jpg' class='card-img border-img' alt='...'>
+                    <div class="card-body">
+                        <p class="card-text color-txt text-center">{{ matchups.my_cooldown }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Versus central & difficulté  -->
+            <div class="col-4 mt-10 d-flex align-items-center justify-content-center">
+                <div>
+                    <h1 class="versus color-txt text-center my-auto mx-auto">VS</h1>
+                    <style>.difficulté{background-color: {{ matchups.couleur }}}</style>
+                    <div class="difficulté mx-auto"></div>
+                </div>
+            </div>
+
+            <!-- Card champion adverse -->
+            <div class="col-4 mt-10">
+                <div>
+                    <h2 class="color-txt mb-4 text-center champName">{{ matchups.name }}</h2>
+                    <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/{{ matchups.id }}_0.jpg' class='card-img border-img' alt='...'>
+                    <div class="card-body">
+                        <p class="card-text color-txt text-center">{{ matchups.cooldown }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col" id="build">
+            <div class="d-flex">
+                <div class='runesbox'><img src='img/runes/{{ matchups.my_character_name }}/{{ matchups.runes }}.png' class='runes' alt='...'></div>
+                <div class='itemsbox d-flex justify-content-center'><div><img src='img/items/{{ matchups.my_character_name }}/{{ matchups.item_path }}.png' class='items'></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="col-12  justify-content-center mx-auto">
+            <img class=" filetElt" src="img/filet.png" alt="">
+        </div>
+    </div>
+
+    <div class="container mb-footer">
+        <div class="row justify-content-center">
+
+        {% set tips = matchups.tips | split('<br>') %}
+
+            {% if matchups.wave is not null and matchups.teamfight_split is not null %}
+                <div class="col-xl-4 col-8 col-txt pr-4">
+                    <h2 class="color-txt text-center">Tips</h2>
+                    {% for tip in tips %}
+                        <p>{{ tip }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="col-xl-4 col-8 col-txt px-2">
+                    <h2 class="color-txt text-center">Wave management</h2>
+                    <p>{{ matchups.wave }}</p>
+                </div>
+
+                <div class="col-xl-4 col-8 col-txt pl-4">
+                    <h2 class="color-txt text-center">Teamfight / Split push</h2>
+                    <p>{{ matchups.teamfight_split }}</p>
+                </div>
+            {% endif %}
+
+            {% if matchups.teamfight_split is null and matchups.wave is null and matchups.parry is null %}
+                <div class="container-sm">
+                    <div class="col-8 col-txt mx-auto">
+                        <h2 class="color-txt text-center"> Tips</h2>
+                        {% for tip in tips %}
+                            <p>{{ tip }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            {% if matchups.parry is not null %}
+                <div class="col-8 col-xl-6">
+                    <h2 class="color-txt text-center">Spells à parry</h2>
+                    <div class="d-flex justify-content-center" id="parryspell">
+                        {{ matchups.parry|raw }}
+                    </div>
+                </div>
+
+                <div class="col-8 col-xl-6">
+                    <h2 class="color-txt text-center">Tips</h2>
+                    {% for tip in tips %}
+                        <p>{{ tip }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+{% endblock %}
