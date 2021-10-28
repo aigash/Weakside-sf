@@ -23,7 +23,8 @@
                   <img src="img/miniature_news/{{ new.image }}.jpg" class="d-block" alt="...">
                   <div class="carousel-caption d-none d-md-block {{ new.display }}">
                     <h2 class="color-txt">{{ new.titre }}</h2>
-                    <p class="">{{ new.description|raw }}</p>
+                    
+                    <p class="">{{ include(template_from_string(new.description))}}</p>
                   </div>
                 </div>
                 {% set countnews = countnews + 1 %}

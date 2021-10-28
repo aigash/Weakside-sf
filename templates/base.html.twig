@@ -34,19 +34,19 @@
                         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                 <li class="nav-item">
-                                    <a class=" nav-link px-3" href="{{ path('home') }}">Accueil</a>
+                                    <a class=" nav-link px-3 {% if app.request.attributes.get('_route') == 'home' %}active{% endif %}" href="{{ path('home') }}">Accueil</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class=" nav-link px-3" href="{{ path('selection') }}">Matchups</a>
+                                    <a class=" nav-link px-3 {% if app.request.attributes.get('_route') == 'selection' or 'adversaires' in app.request.attributes.get('_route') or 'matchup' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('selection') }}">Matchups</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class=" nav-link px-3" href="{{ path('reverse') }}">Reverse</a>
+                                    <a class=" nav-link px-3 {% if app.request.attributes.get('_route') == 'reverse' %}active{% endif %}" href="{{ path('reverse') }}">Reverse</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class=" nav-link px-3" href="#">Guides</a>
+                                    <a class=" nav-link px-3 {% if app.request.attributes.get('_route') == 'guide' %}active{% endif %}" href="{{ path('guide') }}">Guides</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class=" nav-link px-3" href="#">Contact</a>
+                                    <a class=" nav-link px-3" href="{% if app.request.attributes.get('_route') == 'home' %}#aboutweakside{% else %}{{ path('home') }}#aboutweakside{% endif %}">Contact</a>
                                 </li>
                             </ul>
                         </div>
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="container d-flex justify-content-center" id="mentions">
-                    <a href="#">Mentions légales</a>
+                    <a href="{{ path('mentions') }}">Mentions légales</a>
                 </div>
             </footer>
         {% endblock %}
