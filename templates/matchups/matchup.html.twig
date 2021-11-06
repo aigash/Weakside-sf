@@ -7,8 +7,8 @@
             <div class="col-4 mt-10">
                 <div>
                     <h2 class="color-txt mb-4 text-center champName">{{ matchups.my_character_name }}</h2>
-                    <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/tiles/{{ matchups.my_character_id }}_0.jpg' class='card-img border-img' alt='...'>
-                    <!-- http://ddragon.leagueoflegends.com/cdn/img/champion/loading/ pour la loading image a la verticale -->
+                    <img src='{{ imgTiles }}{{ matchups.my_character_id }}_0.jpg' class='card-img border-img' alt='...'>
+                    {# {{ imgLoading }} pour la loading image a la verticale #}
                     <div class="card-body">
                         <p class="card-text color-txt text-center">
                         {% set spells_array = ['Q', 'W', 'E', 'R'] %}
@@ -20,14 +20,31 @@
 
                         {% for spellcd in my_champ.spells %}
                                 {{ spells_array[ count ] }}
-                                {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
-                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
-                                {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
-                                {{ spellcd.cooldown.0 }} | 
-                                {% elseif count == 3 and spellcd.cooldown.0 != spellcd.cooldown.2 %}
-                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                <!-- Dans l'API Riot, certains champions ont un tableau de cooldown avec 6 entrées car il y a le sort au lv 0 
+                                donc pour être sur de comparer le lv 1 avec le lv 5 et pas le lv 4 pour tous les champions, on vérifie le nombre 
+                                de valeurs dans le tableau -->
+                                {% if spellcd.cooldown.5 is defined %}
+                                    {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.5 %}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.5 }} | 
+                                    {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.5 %}
+                                    {{ spellcd.cooldown.0 }} |
+                                    <!-- Dans l'API Riot, certains champions ont un tableau de cooldown pour leur ulti avec une seule entrée.
+                                    On vérifie donc le nombre de valeurs pour éviter d'avoir une erreur qui dit que la 3ème entrée n'existe pas -->
+                                    {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                    {% else %}
+                                    {{ spellcd.cooldown.0 }}
+                                    {% endif %}
                                 {% else %}
-                                {{ spellcd.cooldown.0 }}
+                                    {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
+                                    {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
+                                    {{ spellcd.cooldown.0 }} |
+                                    {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                    {% else %}
+                                    {{ spellcd.cooldown.0 }}
+                                    {% endif %}
                                 {% endif %}
                                 {% set count = count + 1 %}
                         {% endfor %}
@@ -49,7 +66,7 @@
             <div class="col-4 mt-10">
                 <div>
                     <h2 class="color-txt mb-4 text-center champName">{{ matchups.name }}</h2>
-                    <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/tiles/{{ matchups.id }}_0.jpg' class='card-img border-img' alt='...'>
+                    <img src='{{ imgTiles }}{{ matchups.id }}_0.jpg' class='card-img border-img' alt='...'>
                     <div class="card-body">
                         <p class="card-text color-txt text-center">
                         {% set count = 0 %}
@@ -60,14 +77,26 @@
 
                         {% for spellcd in enemy_champ.spells %}
                                 {{ spells_array[ count ] }}
-                                {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
-                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
-                                {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
-                                {{ spellcd.cooldown.0 }} | 
-                                {% elseif count == 3 and spellcd.cooldown.0 != spellcd.cooldown.2 %}
-                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                {% if spellcd.cooldown.5 is defined %}
+                                    {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.5 %}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.5 }} | 
+                                    {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.5 %}
+                                    {{ spellcd.cooldown.0 }} |
+                                    {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                    {% else %}
+                                    {{ spellcd.cooldown.0 }}
+                                    {% endif %}
                                 {% else %}
-                                {{ spellcd.cooldown.0 }}
+                                    {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
+                                    {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
+                                    {{ spellcd.cooldown.0 }} |
+                                    {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                    {% else %}
+                                    {{ spellcd.cooldown.0 }}
+                                    {% endif %}
                                 {% endif %}
                                 {% set count = count + 1 %}
                         {% endfor %}
@@ -78,9 +107,10 @@
         </div>
     </div>
 
+    {#
     {{ dump(my_champ) }}
     {{ dump(enemy_champ) }}
-    
+    #}
     <div class="container">
         <div class="col" id="build">
             <div class="d-flex">
@@ -168,7 +198,7 @@
                 <div class="col-8 col-xl-6">
                     <h2 class="color-txt text-center">Spells à parry</h2>
                     <div class="d-flex justify-content-center" id="parryspell">
-                        {{ matchups.parry|raw }}
+                        {{ include(template_from_string(matchups.parry))|raw }}
                     </div>
                 </div>
 

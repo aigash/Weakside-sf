@@ -24,8 +24,8 @@
                                                         {% endif %}>
 
                             <style>.dif{{ reverse.difid }}{background-color: {{ reverse.couleur }};}</style>
-                            <a href=''>
-                            <div class='position-relative'><div class='filter position-absolute'></div><div><img src ='http://ddragon.leagueoflegends.com/cdn/img/champion/tiles/{{ reverse.id }}_0.jpg' alt=''><div class='difficulté dif{{ reverse.difid }} mx-auto'></div></div></div>
+                            <a href='{{ path('matchup',{idM:reverse.id_my_character, idE:idE}) }}'>
+                            <div class='position-relative'><div class='filter position-absolute'></div><div><img src ='{{ imgTiles }}{{ reverse.id }}_0.jpg' alt=''><div class='difficulté dif{{ reverse.difid }} mx-auto'></div></div></div>
                             </a>";
                             ?>
                         </div>

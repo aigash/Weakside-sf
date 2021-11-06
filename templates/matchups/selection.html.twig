@@ -20,10 +20,10 @@
             {% if champ.state == 1 %}
               {% set id = champ.id %}
                 <a href='{{ path('adversairesChamp',{id:champ.id}) }}'>
-                    <div class='position-relative'><div class='filter position-absolute'></div><img src='http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/{{ champ.id }}.png' class='card-img' alt=''></div>
+                    <div class='position-relative'><div class='filter position-absolute'></div><img src='{{ imgChamp }}{{ champ.id }}.png' class='card-img' alt=''></div>
                 </a>
             {% else %}
-                <div class='position-relative'><div class='position-absolute'></div><img src='http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/{{ champ.id }}.png' class='card-img' alt=''></div>
+                <div class='position-relative'><div class='position-absolute'></div><img src='{{ imgChamp }}{{ champ.id }}.png' class='card-img' alt=''></div>
             {% endif %}
         
             </div>

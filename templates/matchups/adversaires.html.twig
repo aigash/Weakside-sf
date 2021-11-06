@@ -30,7 +30,7 @@
                 {% for adversaireR in adversairesR %}
                     <div class="px-2 py-2 scale advsearch" data-nom="{{ adversaireR.name }}" id="{{ adversaireR.id }}">
                         <a href='{{ path('reversematchup',{idE:adversaireR.id}) }}'>
-                            <div class='position-relative'><div class='filter position-absolute'></div><img src='http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/{{ adversaireR.id }}.png' class='card-img' alt=''></div>
+                            <div class='position-relative'><div class='filter position-absolute'></div><img src='{{ imgChamp }}{{ adversaireR.id }}.png' class='card-img' alt=''></div>
                         </a>
                     </div>
                 {% endfor %}
@@ -40,7 +40,7 @@
                     <a href='{{ path('matchup',{idM:id, idE:adversaire.id}) }}'>
                         <div class='position-relative'> 
                             <div class='filter position-absolute'></div>
-                            <img src='http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/{{ adversaire.id }}.png' class='card-img' alt=''>
+                            <img src='{{ imgChamp }}{{ adversaire.id }}.png' class='card-img' alt=''>
                         </div>
                     </a>
                 </div>
