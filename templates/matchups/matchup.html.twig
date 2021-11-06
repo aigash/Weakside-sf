@@ -10,7 +10,28 @@
                     <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/tiles/{{ matchups.my_character_id }}_0.jpg' class='card-img border-img' alt='...'>
                     <!-- http://ddragon.leagueoflegends.com/cdn/img/champion/loading/ pour la loading image a la verticale -->
                     <div class="card-body">
-                        <p class="card-text color-txt text-center">{{ matchups.my_cooldown }}</p>
+                        <p class="card-text color-txt text-center">
+                        {% set spells_array = ['Q', 'W', 'E', 'R'] %}
+                        {% set count = 0 %}
+
+                        {% if matchups.my_cooldown != null %}
+                            {{ matchups.my_cooldown }}
+                        {% endif %}
+
+                        {% for spellcd in my_champ.spells %}
+                                {{ spells_array[ count ] }}
+                                {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
+                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
+                                {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
+                                {{ spellcd.cooldown.0 }} | 
+                                {% elseif count == 3 and spellcd.cooldown.0 != spellcd.cooldown.2 %}
+                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                {% else %}
+                                {{ spellcd.cooldown.0 }}
+                                {% endif %}
+                                {% set count = count + 1 %}
+                        {% endfor %}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -30,13 +51,36 @@
                     <h2 class="color-txt mb-4 text-center champName">{{ matchups.name }}</h2>
                     <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/tiles/{{ matchups.id }}_0.jpg' class='card-img border-img' alt='...'>
                     <div class="card-body">
-                        <p class="card-text color-txt text-center">{{ matchups.cooldown }}</p>
+                        <p class="card-text color-txt text-center">
+                        {% set count = 0 %}
+
+                        {% if matchups.cooldown != null %}
+                            {{ matchups.cooldown }}
+                        {% endif %}
+
+                        {% for spellcd in enemy_champ.spells %}
+                                {{ spells_array[ count ] }}
+                                {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
+                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
+                                {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
+                                {{ spellcd.cooldown.0 }} | 
+                                {% elseif count == 3 and spellcd.cooldown.0 != spellcd.cooldown.2 %}
+                                {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
+                                {% else %}
+                                {{ spellcd.cooldown.0 }}
+                                {% endif %}
+                                {% set count = count + 1 %}
+                        {% endfor %}
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    {{ dump(my_champ) }}
+    {{ dump(enemy_champ) }}
+    
     <div class="container">
         <div class="col" id="build">
             <div class="d-flex">
