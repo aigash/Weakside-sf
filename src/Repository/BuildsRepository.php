@@ -22,6 +22,20 @@ class BuildsRepository extends ServiceEntityRepository
     // /**
     //  * @return Builds[] Returns an array of Builds objects
     //  */
+    public function getBuildById($id)
+    {
+        $request = "SELECT * FROM builds
+        WHERE id = :id";
+
+        $params = array(
+            "id" => $id
+        );
+
+        $rsl = $this->getEntityManager()->getConnection()->prepare($request);
+        $rsl->executeQuery($params);
+
+        return $rsl->fetch();
+    }
     /*
     public function findByExampleField($value)
     {

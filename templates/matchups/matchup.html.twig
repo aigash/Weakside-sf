@@ -1,33 +1,65 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <!-- Card champion joué -->
-            <div class="col-4 mt-10">
-                <div>
-                    <h2 class="color-txt mb-4 text-center champName">{{ matchups.my_character_name }}</h2>
-                    <img src='{{ imgTiles }}{{ matchups.my_character_id }}_0.jpg' class='card-img border-img' alt='...'>
-                    {# {{ imgLoading }} pour la loading image a la verticale #}
-                    <div class="card-body">
-                        <p class="card-text color-txt text-center">
-                        {% set spells_array = ['Q', 'W', 'E', 'R'] %}
-                        {% set count = 0 %}
+<style>@media (min-width: 1200px) {body{background:linear-gradient(90deg, rgba(18,14,29,0.9) 0%, rgba(18,14,29,0.9) 100%), url({{ imgSplash }}{{ matchups.id }}_0.jpg) no-repeat; background-size:100%;}nav{margin-bottom:0;}}</style>
+    <section class="container blocChamps">
+        <div class='mb-5'>
+            <h1 class="text-center">{{ matchups.my_character_id }} contre {{ matchups.id }}</h1>
+            <div class="difficulty mx-auto"></div>
+            <style>.difficulty{width:50%; background-color: {{matchups.couleur}};}</style>
+        </div>
 
-                        {% if matchups.my_cooldown != null %}
-                            {{ matchups.my_cooldown }}
-                        {% endif %}
+        <div class='d-flex flex-wrap justify-content-around'>              
+            {#
+            {{ dump(my_champ) }}
+            {{ dump(enemy_champ) }}
+            #}
+            <div id="RunesCD" class='d-flex justify-content-between'>
+                <div id='runesMatchup' class='blocMatchup'>
+                    <h2>Runes</h2>
+                    <div class='d-flex justify-content-center'>
+                        <div class='d-flex align-items-center runesLeft'>
+                            <img class="keystone py-1" src="{{ runes.0.image }}">
+                            {% for rune in runes|slice(1,3) %}
+                                <img class="runes py-1" src="{{ rune.image }}">
+                            {% endfor %}
+                        </div>
+                        <div class='d-flex align-items-center runesRight'>
+                            <img class="runes py-1 mt-2" src="{{ runes.4.image }}">
+                            <img class="runes lastRune py-1" src="{{ runes.5.image }}">
+                            {% for rune in runes|slice(6,8) %}
+                                <img class="rannexe py-1" src="{{ rune.image }}">
+                            {% endfor %}                     
+                        </div>
+                    </div>
+                </div>
 
-                        {% for spellcd in my_champ.spells %}
-                                {{ spells_array[ count ] }}
+                <!-- COOLDOWNS -->
+                <div id='CDMatchup' class='blocMatchup'>
+                    <h2>Cooldowns</h2>
+                    {% set spells_array = ['Q', 'W', 'E', 'R'] %}
+                    {% set count = 0 %}
+
+                    {% if matchups.cooldown != null %}
+                        <div class='d-flex align-items-center'>
+                            <img src=' {{ imgPassive }}{{ enemy_champ.passive.image.full }}'>
+                            {{ include(template_from_string(matchups.cooldown))|raw }}
+                        </div>
+                    {% endif %}
+
+                    {% for spellcd in enemy_champ.spells %}
+                        <div class='d-flex align-items-center'>
+                            <img src='{{ imgSpell }}{{ spellcd.image.full }}'>
+                            <p>
+                                <span class='WS-color'>{{ spells_array[ count ] }}</span>
                                 <!-- Dans l'API Riot, certains champions ont un tableau de cooldown avec 6 entrées car il y a le sort au lv 0 
                                 donc pour être sur de comparer le lv 1 avec le lv 5 et pas le lv 4 pour tous les champions, on vérifie le nombre 
                                 de valeurs dans le tableau -->
                                 {% if spellcd.cooldown.5 is defined %}
                                     {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.5 %}
-                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.5 }} | 
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.5 }}
                                     {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.5 %}
-                                    {{ spellcd.cooldown.0 }} |
+                                    {{ spellcd.cooldown.0 }}
                                     <!-- Dans l'API Riot, certains champions ont un tableau de cooldown pour leur ulti avec une seule entrée.
                                     On vérifie donc le nombre de valeurs pour éviter d'avoir une erreur qui dit que la 3ème entrée n'existe pas -->
                                     {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
@@ -37,9 +69,9 @@
                                     {% endif %}
                                 {% else %}
                                     {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
-                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
+                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} 
                                     {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
-                                    {{ spellcd.cooldown.0 }} |
+                                    {{ spellcd.cooldown.0 }}
                                     {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
                                     {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
                                     {% else %}
@@ -47,169 +79,66 @@
                                     {% endif %}
                                 {% endif %}
                                 {% set count = count + 1 %}
-                        {% endfor %}
-                        </p>
-                    </div>
+                            </p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-
-            <!-- Versus central & difficulté  -->
-            <div class="col-4 mt-10 d-flex align-items-center justify-content-center">
-                <div>
-                    <h1 class="versus color-txt text-center my-auto mx-auto">VS</h1>
-                    <style>.difficulté{background-color: {{ matchups.couleur }}}</style>
-                    <div class="difficulté mx-auto"></div>
-                </div>
-            </div>
-
-            <!-- Card champion adverse -->
-            <div class="col-4 mt-10">
-                <div>
-                    <h2 class="color-txt mb-4 text-center champName">{{ matchups.name }}</h2>
-                    <img src='{{ imgTiles }}{{ matchups.id }}_0.jpg' class='card-img border-img' alt='...'>
-                    <div class="card-body">
-                        <p class="card-text color-txt text-center">
-                        {% set count = 0 %}
-
-                        {% if matchups.cooldown != null %}
-                            {{ matchups.cooldown }}
-                        {% endif %}
-
-                        {% for spellcd in enemy_champ.spells %}
-                                {{ spells_array[ count ] }}
-                                {% if spellcd.cooldown.5 is defined %}
-                                    {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.5 %}
-                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.5 }} | 
-                                    {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.5 %}
-                                    {{ spellcd.cooldown.0 }} |
-                                    {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
-                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
-                                    {% else %}
-                                    {{ spellcd.cooldown.0 }}
-                                    {% endif %}
-                                {% else %}
-                                    {% if count < 3 and spellcd.cooldown.0 != spellcd.cooldown.4 %}
-                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.4 }} | 
-                                    {% elseif count < 3 and spellcd.cooldown.0 == spellcd.cooldown.4 %}
-                                    {{ spellcd.cooldown.0 }} |
-                                    {% elseif count == 3 and spellcd.cooldown.2 is defined and spellcd.cooldown.0 != spellcd.cooldown.2%}
-                                    {{ spellcd.cooldown.0 }}-{{ spellcd.cooldown.2 }}
-                                    {% else %}
-                                    {{ spellcd.cooldown.0 }}
-                                    {% endif %}
-                                {% endif %}
-                                {% set count = count + 1 %}
-                        {% endfor %}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {#
-    {{ dump(my_champ) }}
-    {{ dump(enemy_champ) }}
-    #}
-    <div class="container">
-        <div class="col" id="build">
-            <div class="d-flex">
-                <div class='d-flex mr-5'>
-                    <div class='d-flex flex-column align-items-center'>
-                        <img class="keystone py-1" src="{{ runes.0.image }}">
-                        {% for rune in runes|slice(1,3) %}
-                            <img class="runes py-1" src="{{ rune.image }}">
-                        {% endfor %}
-                    </div>
-                    <div class='d-flex flex-column align-items-center'>
-                        <img class="runes py-1 mt-2" src="{{ runes.4.image }}">
-                        <img class="runes py-1" src="{{ runes.5.image }}">
-                        <img class="rannexe py-1" src="{{ runes.6.image }}">
-                        {% if runes|length == 8 %}
-                            <img class="rannexe py-1" src="{{ runes.6.image }}">
-                            <img class="rannexe" src="{{ runes.7.image }}">
-                        {% else %}
-                            <img class="rannexe py-1" src="{{ runes.7.image }}">
-                            <img class="rannexe py-1" src="{{ runes.8.image }}">  
-                        {% endif %}                       
-                    </div>
-                </div>
-                <div class=''>
+            
+            <div id='buildMatchup' class='d-flex flex-column justify-content-between'>
+                <div class='blocMatchup'>
                     <h2 class="color-txt text-center">Build standard</h2>
                     <div class="d-flex justify-content-center">
                         {% for item in items|slice(0,6) %}
                             <img class="" src="{{ item.image }}">
                         {% endfor %}
                     </div>
+                </div>
+
+                <div class='blocMatchup'>
                     <h2 class="color-txt text-center justify-content-center">Items situationnels</h2>
                     <div class="d-flex justify-content-center">
                         {% for item in items|slice(6,12) %}
-                            <img class="" src="{{ item.image }}">
+                            {% if item != false %}
+                                <img class="" src="{{ item.image }}">
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
-                
             </div>
-        </div>
-    </div>
 
-    <div class="container-fluid">
-        <div class="col-12  justify-content-center mx-auto">
-            <img class=" filetElt" src="img/filet.png" alt="">
-        </div>
-    </div>
-
-    <div class="container mb-footer">
-        <div class="row justify-content-center">
-
-        {% set tips = matchups.tips | split('<br>') %}
-
-            {% if matchups.wave is not null and matchups.teamfight_split is not null %}
-                <div class="col-xl-4 col-8 col-txt pr-4">
-                    <h2 class="color-txt text-center">Tips</h2>
+            <div id='tipsMatchup' class="blocMatchup">
+                {% set tips = matchups.tips | split('<br>') %}
+                <div>
+                    <h2 class="text-center">Tips</h2>
                     {% for tip in tips %}
-                        <p>{{ tip }}</p>
+                        <p class='text-center'>{{ tip }}</p>
                     {% endfor %}
                 </div>
+            </div>
 
-                <div class="col-xl-4 col-8 col-txt px-2">
-                    <h2 class="color-txt text-center">Wave management</h2>
-                    <p>{{ matchups.wave }}</p>
-                </div>
-
-                <div class="col-xl-4 col-8 col-txt pl-4">
-                    <h2 class="color-txt text-center">Teamfight / Split push</h2>
-                    <p>{{ matchups.teamfight_split }}</p>
-                </div>
+            {% if matchups.wave is not null or matchups.teamfight_split is not null or matchups.parry is not null %}
+            <div id='moreTipsMatchup' class="blocMatchup">
+                {% if matchups.wave is not null %}
+                        <h2 class="text-center">Wave management</h2>
+                        <p class='text-center'>{{ matchups.wave }}</p>
+                    {% endif %}
+                    {% if matchups.teamfight_split is not null %}
+                        <h2 class="color-txt text-center">Teamfight / Split push</h2>
+                        <p class='text-center'>{{ matchups.teamfight_split }}</p>
+                    {% endif %}
+                    {% if matchups.parry is not null %}
+                        <h2 class="color-txt text-center">Spells à parry</h2>
+                        <div class="d-flex justify-content-center" id="parryspell">
+                            {{ include(template_from_string(matchups.parry))|raw }}
+                        </div>
+                    {% endif %}
+            </div>
+            {% else %}
+            <div id="emptyMatchup" class='blocMatchup'>
+            </div>
             {% endif %}
 
-            {% if matchups.teamfight_split is null and matchups.wave is null and matchups.parry is null %}
-                <div class="container-sm">
-                    <div class="col-8 col-txt mx-auto">
-                        <h2 class="color-txt text-center"> Tips</h2>
-                        {% for tip in tips %}
-                            <p>{{ tip }}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-            
-            {% if matchups.parry is not null %}
-                <div class="col-8 col-xl-6">
-                    <h2 class="color-txt text-center">Spells à parry</h2>
-                    <div class="d-flex justify-content-center" id="parryspell">
-                        {{ include(template_from_string(matchups.parry))|raw }}
-                    </div>
-                </div>
-
-                <div class="col-8 col-xl-6">
-                    <h2 class="color-txt text-center">Tips</h2>
-                    {% for tip in tips %}
-                        <p>{{ tip }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            
         </div>
-    </div>
+    </section>
 {% endblock %}

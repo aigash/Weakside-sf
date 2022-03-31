@@ -20,4 +20,16 @@ class HomeController extends AbstractController
             'news' => $News
         ]);
     }
+
+    #[Route('/mentions', name: 'mentions')]
+    public function mentions(): Response
+    {
+        return $this->render('mentions/mentions.html.twig', []);
+    }
+
+    #[Route('/about', name: 'about')]
+    public function about(): Response
+    {
+        return $this->render('about/about.html.twig', []);
+    }
 }

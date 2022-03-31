@@ -22,6 +22,23 @@ class RunesRepository extends ServiceEntityRepository
     // /**
     //  * @return Runes[] Returns an array of Runes objects
     //  */
+
+    public function getRuneById($id)
+    {
+        $request = "SELECT r.nom, r.image, r.description, tr.nom AS type_rune, cr.nom AS categorie_rune, cr.image AS categorie_image, cr.description AS categorie_description FROM runes r
+        LEFT JOIN type_rune tr ON r.id_type = tr.id
+        LEFT JOIN categorie_rune cr ON r.id_categorie = cr.id
+        WHERE r.id = :id";
+
+        $params = array(
+            "id" => $id
+        );
+
+        $rsl = $this->getEntityManager()->getConnection()->prepare($request);
+        $rsl->executeQuery($params);
+
+        return $rsl->fetch();
+    }
     /*
     public function findByExampleField($value)
     {

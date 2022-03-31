@@ -1,35 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <section class="container">
-    <div class="d-flex justify-content-around titre-b">
-      <div class="align-items-center d-none d-xl-flex">
-        <img src="img/bg/ligne3.png" classe="ligne" id="ligne1" alt="">
-      </div>
-      <h1 class="text-center color-txt">Sélectionnez votre champion</h1>
-      <div class="align-items-center d-none d-xl-flex">
-        <img src="img/bg/ligne3.png" classe="ligne" id="ligne2" alt="">
-      </div>
+    <section class="container blocSelection">
+    <div class='mb-4'>
+      <h1 class="text-center WS-color">Sélectionnez votre champion</h1>
+      <p class=" text-center soustitre">Veuillez sélectionner le champion que vous souhaitez jouer.</p>
     </div>
-    <p class=" text-center soustitre">Veuillez sélectionner le champion que vous souhaitez jouer.</p>
-    <div class="col">
-      <div class="row justify-content-center">
-
+    <div class="col blocChamps">
+      <div class="d-flex justify-content-center flex-wrap">
         {% for champ in selectChamp %}
-            <div class="px-2 py-2 {% if champ.state == 1 %}scale{% else %}indispo{% endif %}">
+            <div class="cardChampS {% if champ.state == 1 %}scale{% else %}indispo{% endif %}">
             {% if champ.state == 1 %}
               {% set id = champ.id %}
                 <a href='{{ path('adversairesChamp',{id:champ.id}) }}'>
-                    <div class='position-relative'><div class='filter position-absolute'></div><img src='{{ imgChamp }}{{ champ.id }}.png' class='card-img' alt=''></div>
+                  <div class='containerImgChamp'>
+                    <img src='{{ imgChamp }}{{ champ.id }}.png' class='' alt=''>
+                  </div>
+                  <div class='socleSelect'>
+                    <p>{{ champ.name }}</p>
+                  </div>
                 </a>
             {% else %}
-                <div class='position-relative'><div class='position-absolute'></div><img src='{{ imgChamp }}{{ champ.id }}.png' class='card-img' alt=''></div>
+              <div class='d-flex h-100'>
+                <div class='containerImgChamp'>
+                  <img src='{{ imgChamp }}{{ champ.id }}.png' class='' alt=''>
+                </div>
+                <div class='socleSelect'>
+                  <p>{{ champ.name }}</p>
+                </div>
+              </div>
             {% endif %}
-        
             </div>
-
         {% endfor %}
-
       </div>
     </div>
   </section>

@@ -22,6 +22,20 @@ class ItemsRepository extends ServiceEntityRepository
     // /**
     //  * @return Items[] Returns an array of Items objects
     //  */
+    public function getItemById($id)
+    {
+        $request = "SELECT * FROM items
+        WHERE id = :id";
+
+        $params = array(
+            "id" => $id
+        );
+
+        $rsl = $this->getEntityManager()->getConnection()->prepare($request);
+        $rsl->executeQuery($params);
+
+        return $rsl->fetch();
+    }
     /*
     public function findByExampleField($value)
     {

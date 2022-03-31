@@ -22,6 +22,20 @@ class SetRunesRepository extends ServiceEntityRepository
     // /**
     //  * @return SetRunes[] Returns an array of SetRunes objects
     //  */
+    public function getSetRunesById($id)
+    {
+        $request = "SELECT * FROM set_runes
+        WHERE id = :id";
+
+        $params = array(
+            "id" => $id
+        );
+
+        $rsl = $this->getEntityManager()->getConnection()->prepare($request);
+        $rsl->executeQuery($params);
+
+        return $rsl->fetch();
+    }
     /*
     public function findByExampleField($value)
     {

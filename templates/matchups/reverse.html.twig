@@ -1,36 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <section class="container mb-footer">
-        <div class="d-flex justify-content-around titre-b">
-            <div class="align-items-center d-none d-xl-flex">
-                <img src="img/bg/ligne3.png" classe="ligne" id="ligne1" alt="">
-            </div>
-            <h1 class="text-center color-txt">Les matchups pour {{ champ.name }}</h1>
-            <div class="align-items-center d-none d-xl-flex">
-                <img src="img/bg/ligne3.png" classe="ligne" id="ligne2" alt="">
-            </div>
+    <section class="container blocReverse">
+        <div>
+            <h1 class="WS-color text-center">Les matchups pour {{ champ.name }}</h1>
+            <p class=" text-center soustitre">Les matchups sont classés par ordre de difficultés afin de vous aiguiller dans votre choix.</p>
         </div>
-        <p class=" text-center soustitre">Les matchups sont classés par ordre de difficultés afin de vous aiguiller dans votre choix.</p>
-        <div class="col">
-            <div class="row justify-content-center">
+        
+        <div class="col blocChamps">
+            <div class="d-flex justify-content-center flex-wrap">
 
                 {% for reverse in reverses %}
-                    <div class="scale2 px-2 py-2">
-                        <div class="iconchamp card-img" {% if idE is defined %}
-                                                            {% if reverse.enemy_name == reverse.name %}
-                                                                style='display: none'
-                                                            {% endif %}
-                                                        {% endif %}>
-
-                            <style>.dif{{ reverse.difid }}{background-color: {{ reverse.couleur }};}</style>
+                    <div class="scale mx-2 py-2 cardChampM">
                             <a href='{{ path('matchup',{idM:reverse.id_my_character, idE:idE}) }}'>
-                            <div class='position-relative'><div class='filter position-absolute'></div><div><img src ='{{ imgTiles }}{{ reverse.id }}_0.jpg' alt=''><div class='difficulté dif{{ reverse.difid }} mx-auto'></div></div></div>
-                            </a>";
-                            ?>
-                        </div>
-
-                        <h3 class="text-center color-txt">{{ reverse.level }}</h3>
+                                <div class='containerImgChamp'>
+                                    <img src ='{{ imgTiles }}{{ reverse.id }}_0.jpg' alt=''>
+                                </div>
+                                <div class='socleSelect'>
+                                    <p>{{ reverse.id }}</p>
+                                    <div class='difficulty dif{{ reverse.difid }} mx-auto'></div>
+                                    <style>.difficulty{width:70%;} .dif{{ reverse.difid }}{background-color: {{ reverse.couleur }};}</style>
+                                    <h3 class="text-center WS-color">{{ reverse.level }}</h3>
+                                </div>
+                            </a>
                     </div>
                 {% endfor %}
 
